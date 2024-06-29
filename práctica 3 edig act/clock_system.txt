@@ -1,0 +1,132 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date:    14:53:20 12/20/2022 
+-- Design Name: 
+-- Module Name:    clock_system - Behavioral 
+-- Project Name: 
+-- Target Devices: 
+-- Tool versions: 
+-- Description: 
+--
+-- Dependencies: 
+--
+-- Revision: 
+-- Revision 0.01 - File Created
+-- Additional Comments: 
+--
+----------------------------------------------------------------------------------
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx primitives in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity clock_system is
+    Port ( min_in : in  STD_LOGIC_VECTOR (5 downto 0);
+           sec_in : in  STD_LOGIC_VECTOR (5 downto 0);
+           save_alarm : in  STD_LOGIC;
+           start_stop : in  STD_LOGIC;
+           clk : in  STD_LOGIC;
+           rst : in  STD_LOGIC;
+           min_out : out  STD_LOGIC_VECTOR (5 downto 0);
+           sec_out : out  STD_LOGIC_VECTOR (5 downto 0);
+           alarm : out  STD_LOGIC);
+end clock_system;
+
+architecture Behavioral of clock_system is
+COMPONENT flipflop_t
+ Port ( T : in  STD_LOGIC;
+           Q : out  STD_LOGIC;
+           clk : in  STD_LOGIC;
+           rst : in  STD_LOGIC);
+END COMPONENT;
+COMPONENT prescaler
+Port ( clk : in  STD_LOGIC;
+           rst : in  STD_LOGIC;
+           en : in  STD_LOGIC;
+           pulse_1_sec : out  STD_LOGIC);
+END COMPONENT;
+COMPONENT reg
+Port ( min_in : in  STD_LOGIC_VECTOR(5 downto 0);
+           sec_in : in  STD_LOGIC_VECTOR(5 downto 0);
+           en : in  STD_LOGIC;
+           rst : in  STD_LOGIC;
+           clk : in  STD_LOGIC;
+           min_out : out  STD_LOGIC_VECTOR(5 downto 0);
+           sec_out : out  STD_LOGIC_VECTOR(5 downto 0));
+END COMPONENT;
+COMPONENT sec_counter
+Port ( clk : in  STD_LOGIC;
+           en : in  STD_LOGIC;
+           rst : in  STD_LOGIC;
+           min : out  STD_LOGIC_VECTOR(5 downto 0);
+           sec : out  STD_LOGIC_VECTOR(5 downto 0));
+END COMPONENT;
+COMPONENT comparator
+ Port ( min_1 : in  STD_LOGIC_VECTOR (5 downto 0);
+        sec_1 : in  STD_LOGIC_VECTOR (5 downto 0);
+        min_2 : in  STD_LOGIC_VECTOR (5 downto 0);
+        sec_2 : in  STD_LOGIC_VECTOR (5 downto 0);
+        en : in  STD_LOGIC;
+        comp_out : out  STD_LOGIC);
+END COMPONENT;			  
+
+signal en1,pulso :STD_LOGIC;
+signal min1,sec1,min2,sec2 :STD_LOGIC_VECTOR (5 downto 0);	  
+begin
+
+v1: flipflop_t port map(
+   rst=>rst,
+	clk=>clk,
+	T=>start_stop,
+	Q=>en1
+);
+
+v2: prescaler port map(
+   rst=>rst,
+	clk=>clk,
+	en=>en1,
+	pulse_1_sec=>pulso
+	
+);
+v3: reg port map(
+   rst=>rst,
+	clk=>clk,
+	en=>(en1 and save_alarm),
+	min_in=>min_in,
+	sec_in=>sec_in,
+	min_out=>min1,
+	sec_out=>sec1
+
+);
+v4: sec_counter port map(
+   rst=>rst,
+	clk=>clk,
+	en=>(en1 and pulso),
+	min=>min2,
+	sec=>sec2
+
+);
+v5: comparator port map(
+   en=>en1,
+	min_1=>min1,
+	sec_1=>sec1,
+	min_2=>min2,
+	sec_2=>sec2,
+	comp_out=>alarm
+
+);
+
+min_out<=min2;
+sec_out<=sec2;
+
+end Behavioral;
+

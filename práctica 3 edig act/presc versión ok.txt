@@ -1,0 +1,67 @@
+  
+ 
+ ----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date:    01:07:40 12/20/2022 
+-- Design Name: 
+-- Module Name:    prescaler - Behavioral 
+-- Project Name: 
+-- Target Devices: 
+-- Tool versions: 
+-- Description: 
+--
+-- Dependencies: 
+--
+-- Revision: 
+-- Revision 0.01 - File Created
+-- Additional Comments: 
+--
+----------------------------------------------------------------------------------
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx primitives in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity prescaler is
+    Port ( clk : in  STD_LOGIC;
+           rst : in  STD_LOGIC;
+           en : in  STD_LOGIC;
+           pulse_1_sec : out  STD_LOGIC);
+end prescaler;
+
+architecture Behavioral of prescaler is
+signal cont:integer :=0;
+signal nuev:STD_LOGIC :='0';
+
+begin
+  
+process(clk,rst)
+begin
+if(rst='1') then
+cont<=1;
+nuev<='0';
+elsif(en='1') then
+if(rising_edge(clk)) then
+cont <=cont+1;
+nuev<='0';
+   if (cont = 5) then
+   nuev <= NOT nuev;
+   cont <= 1;
+end if;
+end if;
+end if;
+pulse_1_sec <= nuev;
+end process;
+  
+end Behavioral;
+ 
+

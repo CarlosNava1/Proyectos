@@ -1,0 +1,71 @@
+  
+ ----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date:    19:34:52 12/19/2022 
+-- Design Name: 
+-- Module Name:    sec_counter - Behavioral 
+-- Project Name: 
+-- Target Devices: 
+-- Tool versions: 
+-- Description: 
+--
+-- Dependencies: 
+--
+-- Revision: 
+-- Revision 0.01 - File Created
+-- Additional Comments: 
+--
+----------------------------------------------------------------------------------
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx primitives in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity sec_counter is
+    Port ( clk : in  STD_LOGIC;
+           en : in  STD_LOGIC;
+           rst : in  STD_LOGIC;
+           min : out  STD_LOGIC_VECTOR(5 downto 0);
+           sec : out  STD_LOGIC_VECTOR(5 downto 0));
+end sec_counter;
+-- t1 son segundos y t2 minutos
+architecture Behavioral of sec_counter is
+signal t1,t2,t1s,t2s: UNSIGNED(5 downto 0);
+constant maximo: UNSIGNED(5 downto 0):="111111";
+begin
+process(t1,en)
+begin
+if(rst='1') then
+	   t1<= (others=>'0');
+	   t2<= (others=>'0');
+end if; 
+   if(rising_edge(en)) then
+   t1<=t1+1;
+   if(t1=maximo) then
+	   if(t1=maximo and t2=maximo) then
+		 t1<= (others => '0');
+		 t2<= (others => '0');
+		 else
+		 t2<= t2+1;
+	    t1<= (others => '0');
+		  
+	end if;
+end if;     
+end if;
+end process;
+
+sec <=std_logic_vector(t1);
+min <=std_logic_vector(t2);
+
+end Behavioral;

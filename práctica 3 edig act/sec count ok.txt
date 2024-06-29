@@ -1,0 +1,88 @@
+ ----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date:    19:34:52 12/19/2022 
+-- Design Name: 
+-- Module Name:    sec_counter - Behavioral 
+-- Project Name: 
+-- Target Devices: 
+-- Tool versions: 
+-- Description: 
+--
+-- Dependencies: 
+--
+-- Revision: 
+-- Revision 0.01 - File Created
+-- Additional Comments: 
+--
+----------------------------------------------------------------------------------
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx primitives in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity sec_counter is
+    Port ( clk : in  STD_LOGIC;
+           en : in  STD_LOGIC;
+           rst : in  STD_LOGIC;
+           min : out  STD_LOGIC_VECTOR(5 downto 0);
+           sec : out  STD_LOGIC_VECTOR(5 downto 0));
+end sec_counter;
+-- t1 son segundos y t2 minutos
+architecture Behavioral of sec_counter is
+signal t1act,t2act: UNSIGNED(5 downto 0);
+constant maximo: UNSIGNED(5 downto 0):="111011";
+signal valor : integer; 
+begin 
+ process(Clk) is
+    begin
+        if rising_edge(Clk) then
+            if (rst = '1') then
+                valor<= 0;
+                t1act<= (others=>'0');
+                t2act<= (others=>'0');
+            else
+				  if(en='1') then
+                if valor = 0 then
+                    valor <= 0;
+ 
+                     
+                    if t1act = maximo then
+                        t1act <= (others=>'0');
+ 
+                         
+                        if t2act = maximo then
+                            t2act <= (others=>'0');
+ 
+                            
+ 
+                        else
+                            t2act <= t2act + 1;
+                        end if;
+ 
+                    else
+                        t1act <= t1act + 1;
+                    end if;
+ 
+                else
+                    valor <= valor + 1;
+                end if;
+ 
+            end if;
+				end if;
+        end if;
+		  
+    end process;
+sec<=std_logic_vector(t1act);
+min<=std_logic_vector(t2act);
+end Behavioral;

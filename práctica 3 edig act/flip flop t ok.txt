@@ -1,0 +1,61 @@
+   ----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date:    20:46:49 12/18/2022 
+-- Design Name: 
+-- Module Name:    flipflop_t - Behavioral 
+-- Project Name: 
+-- Target Devices: 
+-- Tool versions: 
+-- Description: 
+--
+-- Dependencies: 
+--
+-- Revision: 
+-- Revision 0.01 - File Created
+-- Additional Comments: 
+--
+----------------------------------------------------------------------------------
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_arith.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx primitives in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity flipflop_t is
+    Port ( T : in  STD_LOGIC;
+           Q : out  STD_LOGIC;
+           clk : in  STD_LOGIC;
+           rst : in  STD_LOGIC);
+end flipflop_t;
+
+architecture Behavioral of flipflop_t is
+
+begin
+process(rst,clk)
+variable Q1:STD_LOGIC;
+begin
+if(rst='1') then
+Q1:='0';
+elsif(rising_edge(clk)) then
+ if(T='1') then
+    Q1:=not(Q1);
+end if;
+end if;
+Q<=Q1;
+end process;	 
+
+end Behavioral;
+
+
+ 
+ 

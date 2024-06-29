@@ -1,0 +1,59 @@
+ ----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date:    17:59:11 12/19/2022 
+-- Design Name: 
+-- Module Name:    reg - Behavioral 
+-- Project Name: 
+-- Target Devices: 
+-- Tool versions: 
+-- Description: 
+--
+-- Dependencies: 
+--
+-- Revision: 
+-- Revision 0.01 - File Created
+-- Additional Comments: 
+--
+----------------------------------------------------------------------------------
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx primitives in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity reg is
+    Port ( min_in : in  STD_LOGIC_VECTOR(5 downto 0);
+           sec_in : in  STD_LOGIC_VECTOR(5 downto 0);
+           en : in  STD_LOGIC;
+           rst : in  STD_LOGIC;
+           clk : in  STD_LOGIC;
+           min_out : out  STD_LOGIC_VECTOR(5 downto 0);
+           sec_out : out  STD_LOGIC_VECTOR(5 downto 0));
+end reg;
+
+architecture Behavioral of reg is
+signal senal1, senal2:STD_LOGIC_VECTOR(5 downto 0);
+begin
+process(rst,senal1,senal2,clk,en)
+begin
+if(rst='1') then
+senal1<="111111";
+senal2<="111111";
+elsif(clk' event and clk='1' and en='1') then
+senal1<=min_in;
+senal2<=sec_in;
+end if;
+end process;
+
+min_out<=senal1;
+sec_out<=senal2; 
+
+end Behavioral;
